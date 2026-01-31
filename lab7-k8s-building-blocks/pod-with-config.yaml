@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: app-container
+    image: busybox:1.35
+    command: ['sh', '-c', 'echo "Starting application..." && env && sleep 3600']
+    envFrom:
+    - configMapRef:
+        name: app-config
+    env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
