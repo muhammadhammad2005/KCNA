@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storage-app
+  template:
+    metadata:
+      labels:
+        app: storage-app
+    spec:
+      containers:
+      - name: storage-container
+        image: busybox:1.35
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do echo $(date) >> /data/timestamps.log; sleep 30; done"]
+        volumeMounts:
+        - name: storage-volume
+          mountPath: /data
+      volumes:
+      - name: storage-volume
+        persistentVolumeClaim:
+          claimName: lab-pvc
