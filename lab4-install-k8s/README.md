@@ -82,14 +82,19 @@ kubectl version --client
 ```
 ### Task 4 – Initialize Kubernetes Cluster
 ```bash
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
-```
-Configure kubectl for regular user
-```bash
+# Initialize cluster with flannel pod network CIDR
+sudo kubeadm init \
+  --pod-network-cidr=10.244.0.0/16 \
+  --apiserver-advertise-address=$(hostname -I | awk '{print $1}')
+
+# Configure kubectl for regular user
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# Verify cluster status
 kubectl cluster-info
+# ⚠️ Note: In production, avoid scheduling workloads on control-plane nodes
 ```
 ### Task 5 – Install Flannel Network
 ```bash
@@ -110,40 +115,40 @@ kubectl cluster-info
 kubectl get --raw='/readyz?verbose'
 ```
 ### Task 7 – Deploy Test Application
-
 ```bash
+# Deploy a test nginx application
 kubectl create deployment nginx-test --image=nginx:latest
 kubectl expose deployment nginx-test --port=80 --type=NodePort
 
+# Wait for pods to be ready
+kubectl wait --for=condition=ready pod -l app=nginx-test --timeout=120s
+
+# Verify deployment
 kubectl get deployments
 kubectl get pods
 kubectl get services
-```
-Access the application
-```bash
+
+# Access the app (local cluster)
 NODE_PORT=$(kubectl get service nginx-test -o jsonpath='{.spec.ports[0].nodePort}')
-curl http://localhost:$NODE_PORT
-```
-Clean up test resources
-```bash
+echo "Open in browser or curl: http://localhost:$NODE_PORT"
+curl -I http://localhost:$NODE_PORT
+
+# Clean up test resources
 kubectl delete deployment nginx-test
 kubectl delete service nginx-test
 ```
 ### Task 8 – Additional Checks
-Metrics
 ```bash
-kubectl top nodes
+# Metrics server setup
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 kubectl wait --for=condition=ready pod -l k8s-app=metrics-server -n kube-system --timeout=300s
-```
-Explore API
-```bash
+
+# Verify API resources and versions
 kubectl api-resources
 kubectl api-versions
 kubectl get events --sort-by=.metadata.creationTimestamp
-```
-DNS check
-```bash
+
+# Quick DNS test
 kubectl run test-dns --image=busybox:1.28 --rm -it --restart=Never -- nslookup kubernetes.default
 ```
 ### Troubleshooting Quick Commands
