@@ -17,15 +17,18 @@ spec:
         image: nginx:1.21
         ports:
         - containerPort: 80
+        # Liveness probe ensures the container is restarted if unhealthy
         livenessProbe:
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
+        # Readiness probe ensures the container only receives traffic when ready
         readinessProbe:
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
+
