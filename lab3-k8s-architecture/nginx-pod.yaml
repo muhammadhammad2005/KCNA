@@ -12,8 +12,27 @@ spec:
     - containerPort: 80
     resources:
       requests:
-        memory: "64Mi"
-        cpu: "250m"
+        memory: "64Mi"   # Minimum memory guaranteed
+        cpu: "250m"      # Minimum CPU guaranteed
       limits:
-        memory: "128Mi"
-        cpu: "500m"
+        memory: "128Mi"  # Maximum memory usage
+        cpu: "500m"      # Maximum CPU usage
+    # Liveness probe ensures the container is restarted if unhealthy
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 20
+      periodSeconds: 10
+      timeoutSeconds: 2
+      failureThreshold: 3
+    # Readiness probe ensures traffic is only sent when container is ready
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 2
+      failureThreshold: 3
+
