@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod-volumes
+spec:
+  containers:
+  - name: app-container
+    image: nginx:1.21
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+    - name: secret-volume
+      mountPath: /etc/secrets
+    - name: properties-volume
+      mountPath: /etc/properties
+  volumes:
+  - name: config-volume
+    configMap:
+      name: app-config
+  - name: secret-volume
+    secret:
+      secretName: db-credentials
+  - name: properties-volume
+    configMap:
+      name: app-properties
+  restartPolicy: Never

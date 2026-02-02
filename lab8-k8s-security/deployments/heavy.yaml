@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heavy-app
+  namespace: security-lab
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: heavy
+  template:
+    metadata:
+      labels:
+        app: heavy
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "1"

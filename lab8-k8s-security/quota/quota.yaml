@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: security-quota
+  namespace: security-lab
+spec:
+  hard:
+    pods: "5"
+    requests.cpu: "2"
+    requests.memory: 2Gi
