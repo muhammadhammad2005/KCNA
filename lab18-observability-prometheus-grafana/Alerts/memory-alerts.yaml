@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: memory-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: memory.rules
+    rules:
+    - alert: HighMemory
+      expr: |
+        (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 85
+      for: 2m
+      labels:
+        severity: warning
+
