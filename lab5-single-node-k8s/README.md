@@ -49,32 +49,38 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client
 ```
 
-### 3. Start Minikube Cluster
+### 3. Start Minikube Cluster (real-world version)
 
 ```bash
-minikube start --driver=docker
+# Make sure Docker is running
+sudo systemctl status docker
+
+# Start with explicit resources (common practice)
+minikube start --driver=docker --memory=4096 --cpus=2
 minikube status
 kubectl config current-context
 ```
 
-### 4. Verify Cluster Health
+### 4. Verify Cluster Health (add readiness)
 
 ```bash
 kubectl cluster-info
 kubectl get nodes
-kubectl describe node minikube
 kubectl get pods -n kube-system
-kubectl top node
-kubectl get namespaces
+
+# Wait until all system pods are ready
+kubectl wait --for=condition=Ready pod --all -n kube-system --timeout=300s
 ```
 
-### 5. Deploy Test Application
+### 5. Deploy Test Application (more realistic)
 
 ```bash
 kubectl create deployment hello-minikube --image=nginx:latest
-kubectl get deployments
+kubectl wait --for=condition=Available deployment/hello-minikube --timeout=120s
+
 kubectl expose deployment hello-minikube --type=NodePort --port=80
 kubectl get services
+
 minikube service hello-minikube --url
 curl $(minikube service hello-minikube --url)
 ```
@@ -114,6 +120,10 @@ minikube ip
 * **kubectl commands fail**: Verify context with `kubectl config use-context minikube`.
 * **Insufficient resources**: Start Minikube with more memory/CPU.
 * **Network issues**: Restart Minikube with different network settings.
+
+**Pods stuck in ContainerCreating:**
+- Check images: kubectl describe pod <pod>
+- Check Docker: sudo systemctl status docker
 
 ## Lab Cleanup
 
