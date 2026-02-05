@@ -1,31 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kubernetes Lab 10 - Stand-Alone App</title>
+    <title>Stand-Alone Web Service</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f0f8ff; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; }
-        .info { background: #e8f4fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .success { color: #27ae60; font-weight: bold; }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 80px auto;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #1f2933;
+        }
+
+        .status {
+            padding: 15px;
+            background: #e6f4ea;
+            border-left: 4px solid #2ecc71;
+            margin: 20px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            row-gap: 10px;
+            margin-top: 20px;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 Kubernetes Stand-Alone Application</h1>
-        <div class="info">
-            <h3>Lab 10 Deployment Successful!</h3>
-            <p><span class="success">✓</span> Application deployed using Kubernetes Deployment</p>
-            <p><span class="success">✓</span> Service exposed via NodePort (30080)</p>
-            <p><span class="success">✓</span> Multiple replicas running for high availability</p>
-            <p><span class="success">✓</span> Resource limits and requests configured</p>
+        <h1>Stand-Alone Web Service</h1>
+
+        <div class="status">
+            Service status: Running
         </div>
-        <p><strong>Hostname:</strong> <span id="hostname">Loading...</span></p>
-        <p><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+
+        <div class="grid">
+            <div class="label">Environment</div>
+            <div>Production (Lab)</div>
+
+            <div class="label">Service Type</div>
+            <div>NodePort</div>
+
+            <div class="label">Replicas</div>
+            <div>Multiple (via Deployment)</div>
+
+            <div class="label">Pod Hostname</div>
+            <div id="hostname">Loading...</div>
+
+            <div class="label">Response Time</div>
+            <div id="time">Loading...</div>
+        </div>
+
+        <div class="footer">
+            Kubernetes Lab 10 – Stand-Alone Application Deployment
+        </div>
     </div>
+
     <script>
+        const start = performance.now();
+
         document.getElementById('hostname').textContent = window.location.hostname;
-        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        const end = performance.now();
+        document.getElementById('time').textContent = Math.round(end - start) + " ms";
     </script>
 </body>
 </html>
+
