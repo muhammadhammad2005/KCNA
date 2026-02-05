@@ -2,6 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: multi-volume-app
+  labels:
+    app: multi-volume-app
+    tier: backend
+    environment: lab
 spec:
   replicas: 1
   selector:
@@ -11,12 +15,36 @@ spec:
     metadata:
       labels:
         app: multi-volume-app
+        tier: backend
+        environment: lab
     spec:
       containers:
       - name: multi
         image: busybox:1.35
         command: ["/bin/sh"]
-        args: ["-c", "while true; do echo $(date) >> /data1/a.txt; echo $(date) >> /data2/b.txt; sleep 45; done"]
+        args:
+          - -c
+          - |
+            while true; do
+              echo "$(date) - writing to volume1" >> /data1/a.txt
+              echo "$(date) - writing to volume2" >> /data2/b.txt
+              sleep 30
+            done
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "64Mi"
+            cpu: "200m"
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - test -f /data1/a.txt
+          initialDelaySeconds: 30
+          periodSeconds: 20
         volumeMounts:
         - name: v1
           mountPath: /data1
@@ -29,3 +57,4 @@ spec:
       - name: v2
         persistentVolumeClaim:
           claimName: lab-pvc-2
+
