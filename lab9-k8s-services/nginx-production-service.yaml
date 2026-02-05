@@ -6,23 +6,14 @@ metadata:
     app: nginx
     environment: production
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
-    service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: /health
+    description: "Production-facing nginx service"
 spec:
   type: LoadBalancer
+  sessionAffinity: ClientIP
   selector:
     app: nginx
-    environment: production
   ports:
   - name: http
     port: 80
     targetPort: 80
-    protocol: TCP
-  - name: https
-    port: 443
-    targetPort: 443
-    protocol: TCP
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 10800
+
