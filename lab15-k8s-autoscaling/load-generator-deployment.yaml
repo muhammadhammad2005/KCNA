@@ -15,9 +15,19 @@ spec:
       containers:
       - name: load-generator
         image: busybox
+        env:
+        - name: REQUEST_INTERVAL
+          value: "0.1"
         command: ["/bin/sh"]
-        args: ["-c", "while true; do wget -q -O- http://php-apache; sleep 0.1; done"]
+        args:
+        - -c
+        - |
+          while true; do
+            wget -q -O- http://php-apache
+            sleep $REQUEST_INTERVAL
+          done
         resources:
           requests:
             cpu: 100m
             memory: 64Mi
+
