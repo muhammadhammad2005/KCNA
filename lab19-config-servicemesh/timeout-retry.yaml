@@ -1,14 +1,21 @@
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: reviews-timeout
+  name: reviews-timeout-retry
 spec:
+  hosts:
+  - reviews
   http:
-  - route:
-      - destination:
-          host: reviews
-          subset: v1
+  - match:
+    - uri:
+        prefix: /reviews
+    route:
+    - destination:
+        host: reviews
+        subset: v1
     timeout: 3s
     retries:
       attempts: 3
       perTryTimeout: 1s
+      retryOn: gateway-error,connect-failure,refused-stream
+
