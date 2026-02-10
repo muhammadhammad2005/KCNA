@@ -19,22 +19,6 @@ This portfolio reflects hands-on lab exercises rather than full documentation fo
 - **Execution:** Remote cloud lab nodes  
 - **Focus:** Safe, reproducible labs
 
-## 📂 Repository Structure
-
-- `lab1-container-orchestration` – Multi-app deployments with scripts for scaling, monitoring, performance testing, and cleanup  
-- `lab2-k8s` – Kubernetes deployments with services, probes, and comparison notes  
-
-Each lab may include scripts, configuration files, and Markdown reports where applicable. Even labs without Markdown provide fully functional hands-on examples.
-
-## 🚀 Topics Covered
-
-- Docker and Kubernetes basics  
-- Container orchestration concepts  
-- Multi-app deployment strategies  
-- Scaling and monitoring containers  
-- Health checks and probes  
-- Orchestration analysis and comparisons  
-
 ## ▶️ How to Use
 
 Clone the repository:
