@@ -29,11 +29,6 @@ cd KCNA
 ```
 Explore lab folders to run scripts or apply Kubernetes manifests. Markdown reports, if present, explain objectives, procedures, and results.
 
-## 🔄 Continuous Updates
-
-This repository is actively maintained.
-New labs, orchestration exercises, and Kubernetes deployments will be added over time.
-
 ## 📘 Notes
 
 - Labs are executed in the Al Nafi cloud lab environment, not local machines
